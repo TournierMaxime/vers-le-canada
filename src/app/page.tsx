@@ -1,95 +1,84 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+// app/page.tsx
+"use client"
 
-export default function Home() {
+import { Container, Typography, Box } from "@mui/material"
+import { useEffect, useState } from "react"
+import Link from "next/link"
+
+type Programme = {
+  programme: string
+  posts: {
+    slug: string
+    metadata: {
+      title: string
+      date: string
+      tags?: string[]
+    }
+  }[]
+}
+
+export function Posts() {
+  const [programmes, setProgrammes] = useState<Programme[]>([])
+
+  useEffect(() => {
+    fetch("/api/posts")
+      .then((res) => res.json())
+      .then(setProgrammes)
+  }, [])
+
+  console.log("programmes", programmes)
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <Box mt={4}>
+      {programmes.map(({ programme, posts }) => (
+        <Box key={programme} mb={4}>
+          <Typography variant="h5" gutterBottom textTransform="capitalize">
+            {programme.replace("-", " ")}
+          </Typography>
+          <ul>
+            {posts.map(({ slug, metadata }) => (
+              <li key={slug}>
+                <Link href={`/posts/${programme}/${slug}`}>
+                  {metadata.title}
+                </Link>
+                <br />
+                <Typography variant="caption" color="text.secondary">
+                  {metadata.date}
+                </Typography>
+              </li>
+            ))}
+          </ul>
+        </Box>
+      ))}
+    </Box>
+  )
+}
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+export default function HomePage() {
+  return (
+    <Container maxWidth="md" sx={{ py: 6 }}>
+      <Box textAlign="center" mb={6}>
+        <Typography variant="h2" color="primary">
+          Vers le Canada 🇨🇦
+        </Typography>
+        <Typography variant="h6" color="text.secondary">
+          Mon blog pour vous aider à comprendre comment immigrer au Canada via
+          les différents programmes possible.
+        </Typography>
+      </Box>
+
+      <Box>
+        <Typography variant="h4" gutterBottom>
+          Derniers articles
+        </Typography>
+        <Posts />
+      </Box>
+
+      <Box mt={8} textAlign="center">
+        <Typography variant="body2" color="text.secondary">
+          © {new Date().getFullYear()} Maxime Tournier — Tous droits réservés
+        </Typography>
+      </Box>
+    </Container>
+  )
 }
