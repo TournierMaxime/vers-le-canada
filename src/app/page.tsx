@@ -5,7 +5,7 @@ import { Container, Typography, Box, Card } from "@mui/material"
 import { useEffect, useState } from "react"
 import Link from "next/link"
 
-type Programme = {
+export type Programme = {
   programme: string
   posts: {
     slug: string
@@ -17,7 +17,7 @@ type Programme = {
   }[]
 }
 
-export function Posts() {
+const Posts = () => {
   const [programmes, setProgrammes] = useState<Programme[]>([])
 
   useEffect(() => {
@@ -28,30 +28,18 @@ export function Posts() {
 
   return (
     <Box mt={4}>
-      {programmes.map(({ programme, posts }) => {
+      {programmes.map(({ programme }) => {
         return (
-          <Card
-            raised
+          <Link
+            href={`/posts/${decodeURIComponent(programme)}`}
             key={programme}
-            sx={{ marginBottom: 4, padding: 4, borderRadius: 2 }}
           >
-            <Typography variant="h5" gutterBottom textTransform="capitalize">
-              {programme.replaceAll("-", " ")}
-            </Typography>
-            <ul>
-              {posts.map(({ slug, metadata }) => (
-                <li key={slug}>
-                  <Link href={`/posts/${programme}/${slug}`}>
-                    {metadata.title}
-                  </Link>
-                  <br />
-                  <Typography variant="caption" color="text.secondary">
-                    {metadata.date}
-                  </Typography>
-                </li>
-              ))}
-            </ul>
-          </Card>
+            <Card raised sx={{ marginBottom: 4, padding: 4, borderRadius: 2 }}>
+              <Typography variant="h5" gutterBottom textTransform="capitalize">
+                {programme.replaceAll("-", " ")}
+              </Typography>
+            </Card>
+          </Link>
         )
       })}
     </Box>

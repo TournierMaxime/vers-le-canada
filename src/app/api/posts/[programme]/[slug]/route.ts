@@ -2,18 +2,22 @@
 import fs from "fs"
 import path from "path"
 import matter from "gray-matter"
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 
-export async function GET(
-  _: Request,
-  { params }: { params: { programme: string; slug: string } }
-) {
+export async function GET(req: NextRequest) {
+  const url = new URL(decodeURIComponent(req.url))
+  const pathname = url.pathname // e.g. /api/posts/foo/bar
+  const parts = pathname.split("/")
+
+  const programme = parts[parts.length - 2]
+  const slug = parts[parts.length - 1]
+
   const filePath = path.join(
     process.cwd(),
     "src",
     "posts",
-    params.programme,
-    `${params.slug}.md`
+    programme,
+    `${slug}.md`
   )
 
   if (!fs.existsSync(filePath)) {
@@ -24,8 +28,8 @@ export async function GET(
   const { data, content } = matter(fileContent)
 
   return NextResponse.json({
-    programme: params.programme,
-    slug: params.slug,
+    programme,
+    slug,
     metadata: data,
     content,
   })

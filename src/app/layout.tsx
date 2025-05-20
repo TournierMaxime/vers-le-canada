@@ -1,5 +1,6 @@
 import Nav from "@/components/Nav"
 import type { Metadata } from "next"
+import "@/styles/main.scss"
 
 export const metadata: Metadata = {
   title: "Vers le Canada",

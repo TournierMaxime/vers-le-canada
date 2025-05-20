@@ -6,6 +6,8 @@ import { marked } from "marked"
 import { notFound } from "next/navigation"
 import { Box, Card, Typography } from "@mui/material"
 
+type Params = Promise<{ programme: string; slug: string }>
+
 export async function generateStaticParams() {
   const root = path.join(process.cwd(), "src", "posts")
   const programmes = fs.readdirSync(root)
@@ -21,17 +23,14 @@ export async function generateStaticParams() {
   return allSlugs
 }
 
-export default async function PostPage({
-  params,
-}: {
-  params: { programme: string; slug: string }
-}) {
+const PostPage = async ({ params }: { params: Params }) => {
+  const { programme, slug } = await params
   const filePath = path.join(
     process.cwd(),
     "src",
     "posts",
-    params.programme,
-    `${params.slug}.md`
+    programme,
+    `${slug}.md`
   )
 
   if (!fs.existsSync(filePath)) return notFound()
@@ -58,6 +57,9 @@ export default async function PostPage({
             fontFamily: "Roboto",
             px: 4,
             pt: 0,
+            "& em": {
+              fontStyle: "italic",
+            },
           }}
           dangerouslySetInnerHTML={{ __html: html }}
         />
@@ -69,3 +71,5 @@ export default async function PostPage({
     </Box>
   )
 }
+
+export default PostPage

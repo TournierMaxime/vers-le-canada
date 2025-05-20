@@ -20,9 +20,19 @@ import Image from "next/image"
 import homeLogo from "../../public/assets/images/logo.webp"
 import MenuIcon from "@mui/icons-material/Menu"
 
+interface Item {
+  name: string
+  link: string
+}
+
 const Nav = () => {
   const drawerWidth = 240
-  const navItems = ["About", "Skills", "Projects", "Contact"]
+  const navItems: Item[] = [
+    {
+      name: "Discord",
+      link: "https://discord.gg/fYckuMzswS",
+    },
+  ]
 
   const [mobileOpen, setMobileOpen] = React.useState(false)
 
@@ -37,11 +47,11 @@ const Nav = () => {
       </Link>
       <Divider />
       <List>
-        {navItems.map((item) => (
-          <Link key={item} href={`/#${item}`}>
+        {navItems.map((item, index) => (
+          <Link key={index} href={item.link}>
             <ListItem disablePadding>
               <ListItemButton sx={{ textAlign: "center" }}>
-                <ListItemText primary={item} />
+                <ListItemText primary={item.name} />
               </ListItemButton>
             </ListItem>
           </Link>
@@ -52,7 +62,7 @@ const Nav = () => {
 
   return (
     <Fragment>
-      <AppBar component="nav" sx={{ backgroundColor: "#fff" }}>
+      <AppBar sx={{ backgroundColor: "#fff" }}>
         <Toolbar>
           <IconButton
             color="inherit"
@@ -68,7 +78,7 @@ const Nav = () => {
             component="div"
             sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
           >
-            <Link style={{ textDecoration: "none", color: "#000" }} href={"/"}>
+            <Link href={"/"}>
               <Container
                 sx={{
                   display: "flex",
@@ -82,33 +92,33 @@ const Nav = () => {
             </Link>
           </Typography>
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
-            {navItems.map((item) => (
-              <Link key={item} href={`/#${item}`}>
-                <Button sx={{ color: "#000" }}>{item}</Button>
+            {navItems.map((item, index) => (
+              <Link key={index} href={item.link}>
+                <Button sx={{ color: "#000" }}>{item.name}</Button>
               </Link>
             ))}
           </Box>
         </Toolbar>
       </AppBar>
-      <nav style={{ marginBottom: 50 }}>
-        <Drawer
-          variant="temporary"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
-          }}
-          sx={{
-            display: { xs: "block", sm: "none" },
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
-              width: drawerWidth,
-            },
-          }}
-        >
-          {drawer}
-        </Drawer>
-      </nav>
+
+      <Drawer
+        variant="temporary"
+        open={mobileOpen}
+        onClose={handleDrawerToggle}
+        ModalProps={{
+          keepMounted: true, // Better open performance on mobile.
+        }}
+        sx={{
+          marginBottom: 50,
+          display: { xs: "block", sm: "none" },
+          "& .MuiDrawer-paper": {
+            boxSizing: "border-box",
+            width: drawerWidth,
+          },
+        }}
+      >
+        {drawer}
+      </Drawer>
     </Fragment>
   )
 }
