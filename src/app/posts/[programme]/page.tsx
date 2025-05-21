@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
-import { Box, Typography, Card } from "@mui/material"
+import { Box, Typography, Card, CardMedia, Container } from "@mui/material"
 import Link from "next/link"
 import { Programme } from "@/app/page"
 
@@ -20,33 +20,45 @@ const PageProgramme = () => {
 
   const programmeTarget = programmes.find((p) => p.programme === programme)
 
+  console.log(programmeTarget?.posts)
+
   if (!programmeTarget) return null
 
   return (
-    <Box mt={10}>
-      <Card raised sx={{ marginBottom: 4, padding: 4, borderRadius: 2 }}>
-        <Typography variant="h5" gutterBottom textTransform="capitalize">
-          {programmeTarget.programme.replaceAll("-", " ")}
-        </Typography>
-        <ul>
-          {programmeTarget.posts.map(({ slug, metadata }) => (
-            <li key={slug}>
-              <Link
-                href={`/posts/${decodeURIComponent(
-                  programmeTarget.programme
-                )}/${decodeURIComponent(slug)}`}
-              >
-                {metadata.title}
-              </Link>
-              <br />
-              <Typography variant="caption" color="text.secondary">
-                {metadata.date}
-              </Typography>
-            </li>
-          ))}
-        </ul>
-      </Card>
-    </Box>
+    <Container maxWidth="md">
+      <Box mt={10}>
+        <Card raised sx={{ marginBottom: 4, borderRadius: 2 }}>
+          <CardMedia
+            sx={{ height: 380, width: "100%", objectFit: "cover" }}
+            image={`/assets/images/programs/${decodeURIComponent(
+              programmeTarget.programme
+            )}.webp`}
+            title={programmeTarget.posts[0]?.metadata.programName}
+          />
+          <Typography variant="h5" sx={{ padding: 2 }}>
+            {programmeTarget.posts[0]?.metadata.programName ?? null}
+          </Typography>
+
+          <ul>
+            {programmeTarget.posts.map(({ slug, metadata }) => (
+              <li key={metadata.index}>
+                <Link
+                  href={`/posts/${decodeURIComponent(
+                    programmeTarget.programme
+                  )}/${decodeURIComponent(slug)}`}
+                >
+                  {metadata.title}
+                </Link>
+                <br />
+                <Typography variant="caption" color="text.secondary">
+                  {metadata.date}
+                </Typography>
+              </li>
+            ))}
+          </ul>
+        </Card>
+      </Box>
+    </Container>
   )
 }
 

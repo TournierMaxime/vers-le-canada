@@ -4,7 +4,9 @@ import path from "path"
 import matter from "gray-matter"
 import { marked } from "marked"
 import { notFound } from "next/navigation"
-import { Box, Card, Typography } from "@mui/material"
+import { Box, Button, Card, Container, Typography } from "@mui/material"
+import Link from "next/link"
+import moment from "moment"
 
 type Params = Promise<{ programme: string; slug: string }>
 
@@ -63,9 +65,31 @@ const PostPage = async ({ params }: { params: Params }) => {
           }}
           dangerouslySetInnerHTML={{ __html: html }}
         />
+        <Container
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          {data.previous ? (
+            <Link
+              href={`/posts/${decodeURIComponent(programme)}/${data.previous}`}
+            >
+              <Button size="medium">Vers le chapitre précédent</Button>
+            </Link>
+          ) : null}
+          {data.next ? (
+            <Link href={`/posts/${decodeURIComponent(programme)}/${data.next}`}>
+              <Button size="medium">Vers le chapitre suivant</Button>
+            </Link>
+          ) : null}
+        </Container>
 
-        <Typography sx={{ color: "#999", px: 4, pb: 2 }}>
-          {data.date}
+        <Typography
+          sx={{ fontSize: 16, px: 4, pb: 2, textAlign: "right", mt: 4 }}
+        >
+          {moment(data.date).format("DD/MM/YYYY")}
         </Typography>
       </Card>
     </Box>

@@ -14,7 +14,7 @@ import {
   Button,
   Container,
 } from "@mui/material"
-import React, { Fragment } from "react"
+import React from "react"
 import Link from "next/link"
 import Image from "next/image"
 import homeLogo from "../../public/assets/images/logo.webp"
@@ -61,7 +61,7 @@ const Nav = () => {
   )
 
   return (
-    <Fragment>
+    <Box>
       <AppBar sx={{ backgroundColor: "#fff" }}>
         <Toolbar>
           <IconButton
@@ -119,7 +119,7 @@ const Nav = () => {
       >
         {drawer}
       </Drawer>
-    </Fragment>
+    </Box>
   )
 }
 
