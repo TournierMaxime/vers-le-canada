@@ -5,7 +5,7 @@ import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import { Box, Typography, Card, CardMedia, Container } from "@mui/material"
 import Link from "next/link"
-import { Programme } from "@/app/page"
+import { Programme } from "@/components/Posts"
 
 const PageProgramme = () => {
   const { programme } = useParams() as { programme: string }
@@ -19,8 +19,6 @@ const PageProgramme = () => {
   }, [programme])
 
   const programmeTarget = programmes.find((p) => p.programme === programme)
-
-  console.log(programmeTarget?.posts)
 
   if (!programmeTarget) return null
 

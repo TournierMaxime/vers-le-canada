@@ -76,12 +76,16 @@ const PostPage = async ({ params }: { params: Params }) => {
             <Link
               href={`/posts/${decodeURIComponent(programme)}/${data.previous}`}
             >
-              <Button size="medium">Vers le chapitre précédent</Button>
+              <Button variant="outlined" size="medium">
+                Vers le chapitre précédent
+              </Button>
             </Link>
           ) : null}
           {data.next ? (
             <Link href={`/posts/${decodeURIComponent(programme)}/${data.next}`}>
-              <Button size="medium">Vers le chapitre suivant</Button>
+              <Button variant="outlined" size="medium">
+                Vers le chapitre suivant
+              </Button>
             </Link>
           ) : null}
         </Container>
